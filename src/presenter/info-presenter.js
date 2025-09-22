@@ -19,6 +19,6 @@ export default class TripInfoPresenter {
       totalCost: totalCost
     });
 
-    render(this.infoComponent, this.container, RenderPosition.AFTERBEGIN);
+    render(this.infoComponent, this.infoContainer, RenderPosition.AFTERBEGIN);
   }
 }
