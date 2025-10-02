@@ -16,7 +16,7 @@ function createEventTemplate(point, offers, destination) {
   const { name } = destination || {};
 
   return (
-    `< li class="trip-events__item" >
+    `<li class="trip-events__item">
     <div class="event">
       <time class="event__date" datetime=${dateFrom}>${humanizeEventDate(dateFrom)}</time>
       <div class="event__type">
@@ -48,7 +48,7 @@ function createEventTemplate(point, offers, destination) {
         <span class="visually-hidden">Open event</span>
       </button>
     </div>
-    </li >`
+    </li>`
   );
 }
 

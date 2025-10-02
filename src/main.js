@@ -2,7 +2,7 @@
 import FiltersView from './view/filters-view.js';
 import ItineraryPresenter from './presenter/itinerary-presenter.js';
 import EventsModel from './model/events-model.js';
-import TripInfoPresenter from './presenter/Info-presenter.js';
+import TripInfoPresenter from './presenter/info-presenter.js';
 import { render } from './render.js';
 
 const siteHeaderElement = document.querySelector('.page-header');

@@ -19,7 +19,7 @@ export default class ItineraryPresenter {
 
     const firstPoint = this.boardPoints[0];
 
-    render (new NewPointVeiw({
+    render(new NewPointVeiw({
       point: firstPoint,
       checkedOffers: [...this.eventsModel.getOffersById(firstPoint.type, this.boardPoints[0].offers)],
       offers: this.eventsModel.getOffersByType(firstPoint.type),
