@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { mockDestination } from '../mocked-data/mock-data.js';
 import { TYPES } from '../const.js';
 import { humanizeEventDate } from '../utils.js';
@@ -9,7 +9,7 @@ function createTypeTemplate(type) {
       <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
       <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
     </div>`
-  )
+  );
 }
 
 function createNewOfferTemplate(offer, checkedOffers) {
@@ -61,7 +61,7 @@ function createPhotoContainerTemplate(pictures) {
 }
 
 function createDestinationTemplate(destination) {
-  if (destination && (destination.description || (destination.pictures && destination.pictures.length > 0 ))) {
+  if (destination && (destination.description || (destination.pictures && destination.pictures.length > 0))) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -74,7 +74,7 @@ function createDestinationTemplate(destination) {
 }
 
 function createDestinationList(destination) {
-  return `<option value="${destination.name}"></option>`
+  return (`<option value="${destination.name}"></option>`);
 }
 
 function createNewPointTemplate(point, offers, checkedOffers, destination) {
@@ -139,26 +139,16 @@ function createNewPointTemplate(point, offers, checkedOffers, destination) {
       </form>
     </li>`);
 }
-export default class NewPointVeiw {
+export default class NewPointVeiw extends AbstractView {
   constructor({point, offers, checkedOffers, destination}) {
+    super();
     this.point = point;
     this.offers = offers;
     this.checkedOffers = checkedOffers;
     this.destination = destination;
   }
 
-  getTemplate() {
+  get template() {
     return createNewPointTemplate(this.point, this.offers, this.checkedOffers, this.destination);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

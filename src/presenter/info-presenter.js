@@ -1,5 +1,5 @@
-import {render, RenderPosition} from '../render';
-import TripInfoView from '../view/trip-info-view';
+import {render, RenderPosition} from '../render.js';
+import TripInfoView from '../view/trip-info-view.js';
 
 
 export default class TripInfoPresenter {
@@ -19,6 +19,6 @@ export default class TripInfoPresenter {
       totalCost: totalCost
     });
 
-    render(this.infoComponent, this.container, RenderPosition.AFTERBEGIN);
+    render(this.infoComponent, this.infoContainer, RenderPosition.AFTERBEGIN);
   }
 }

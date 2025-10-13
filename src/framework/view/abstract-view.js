@@ -32,6 +32,11 @@ export default class AbstractView {
     return this.#element;
   }
 
+  // Compatibility method: some utilities expect getElement()
+  getElement() {
+    return this.element;
+  }
+
   /**
    * Геттер для получения разметки элемента
    * @abstract

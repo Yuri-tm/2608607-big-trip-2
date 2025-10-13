@@ -4,12 +4,12 @@ import { humanizeEventDate } from '../utils.js';
 
 
 export default class EventsModel {
-  events = Array.from({ length: CITIES.length - 1 }, getRandomEvent);
+  #events = Array.from({ length: CITIES.length - 1 }, getRandomEvent);
   offers = mockOffers;
   destinations = mockDestination;
 
-  getEvents() {
-    return this.events;
+  get events() {
+    return this.#events;
   }
 
   getOffers() {
@@ -39,7 +39,7 @@ export default class EventsModel {
   }
 
   getTripTitle() {
-    const events = this.getEvents();
+    const events = this.events;
     if (events.length === 0) {
       return 'Add an event into itinerary';
     }
@@ -54,7 +54,7 @@ export default class EventsModel {
   }
 
   getTripDateRange() {
-    const events = this.getEvents();
+    const events = this.events;
     if (events.length === 0) {
       return '';
     }
@@ -65,7 +65,7 @@ export default class EventsModel {
   }
 
   getTotalCost() {
-    const events = this.getEvents();
+    const events = this.events;
 
     return events.reduce((total, point) => {
       const eventCost = point.basePrice;
