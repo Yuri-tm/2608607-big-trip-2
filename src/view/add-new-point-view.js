@@ -13,7 +13,7 @@ function createTypeTemplate(type) {
 }
 
 function createNewOfferTemplate(offer, checkedOffers) {
-  const {id, title, price} = offer;
+  const { id, title, price } = offer;
   const isChecked = checkedOffers.map((item) => item.id).includes(id) ? 'checked' : '';
 
   return (
@@ -140,14 +140,31 @@ function createNewPointTemplate(point, offers, checkedOffers, destination) {
     </li>`);
 }
 export default class NewPointVeiw extends AbstractView {
-  constructor({point, offers, checkedOffers, destination}) {
+  #point = null;
+  #offers = null;
+  #checkedOffers = null;
+  #destination = null;
+
+  constructor({point, offers, checkedOffers, destination, onFormSubmit, onCloseClick }) {
     super();
     this.point = point;
     this.offers = offers;
     this.checkedOffers = checkedOffers;
     this.destination = destination;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleCloseClick = onCloseClick;
+    this.element.querySelector('form').addEventListener('click', this.#closeClickHandler);
   }
 
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
+
+  #closeClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCloseClick();
+  }
   get template() {
     return createNewPointTemplate(this.point, this.offers, this.checkedOffers, this.destination);
   }

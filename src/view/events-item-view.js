@@ -53,14 +53,27 @@ function createEventTemplate(point, offers, destination) {
 }
 
 export default class EventItemView extends AbstractView {
-  constructor({ point, offers, destination }) {
+  #point = null;
+  #destination = null;
+  #offers = null;
+  #handleEditClick = null;
+
+  constructor({ point, offers, destination, onEditClick }) {
     super();
     this.point = point;
     this.offers = offers;
     this.destination = destination;
+    this.#handleEditClick = onEditClick;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#handleEditClick);
   }
 
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
+
   get template() {
-    return createEventTemplate(this.point, this.offers, this.destination);
+    return createEventTemplate(this.#point, this.#offers, this.#destination);
   }
+
 }

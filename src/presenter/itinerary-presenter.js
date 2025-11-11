@@ -1,8 +1,9 @@
+import { render, replace } from '../framework/render.js';
 import EventsListView from '../view/trip-events-list-view.js';
 import SortingView from '../view/sorting-view.js';
 import EventItemView from '../view/events-item-view.js';
-import NewPointView from '../view/add-new-point-view.js';
-import { render, RenderPosition } from '../render.js';
+import NewPointVeiw from '../view/add-new-point-view.js';
+import NoEventsView from '../view/no-events-view.js'
 
 
 export default class ItineraryPresenter {
@@ -11,6 +12,7 @@ export default class ItineraryPresenter {
   #eventsModel = null;
   #boardPoints = [];
 
+
   constructor({ boardContainer, eventsModel }) {
     this.#boardContainer = boardContainer;
     this.#eventsModel = eventsModel;
@@ -18,27 +20,40 @@ export default class ItineraryPresenter {
 
   init() {
     this.#boardPoints = [...this.#eventsModel.events];
+    this.#renderBoard()
+  }
 
-    render(this.#boardComponent, this.#boardContainer, RenderPosition.BEFOREEND);
-    render(new SortingView(), this.#boardComponent.getElement(), RenderPosition.BEFOREEND);
+  #renderPoint(point) {
+    const offers = [...this.#eventsModel.getOffersById(point.type, point.offers)];
+    const destination = this.#eventsModel.getDestinationsById(point.destination);
+    const escKeyHandler = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToEvent();
+        document.removeEventListener('keydown', escKeyHandler);
+      }
+    }
+  };
 
-    if (!this.#boardPoints.length) {
+    if (this.#boardPoints.length === 0) {
+      render(new NoEventsView(), this.#boardContainer);
       return;
     }
 
-    const firstPoint = this.#boardPoints[0];
-
-    render (
-      new NewPointView({
-        point: firstPoint,
-        checkedOffers: [...this.#eventsModel.getOffersById(firstPoint.type, this.#boardPoints[0].offers)],
-        offers: this.#eventsModel.getOffersByType(firstPoint.type),
-        destination: this.#eventsModel.getDestinationsById(firstPoint.destination)
+    const editItemElement = document.createElement('li');
+    editItemElement.className = 'trip-events__item';
+    render(
+      new EventEditView({
+        point: this.#boardPoints[0],
+        offers: [...this.#eventsModel.getOffersById(this.#boardPoints[0].type, this.#boardPoints[0].offers)],
+        destination: this.#eventsModel.getDestinationsById(this.#boardPoints[0].destination),
+        // provide a safe submit handler (implement save/close logic here)
+        onFormSubmit: () => {}
       }),
-      this.#boardComponent.getElement(),
-      RenderPosition.AFTERBEGIN
+      editItemElement,
+      RenderPosition.BEFOREEND
     );
-
+    render(editItemElement, this.#boardComponent.getElement(), RenderPosition.BEFOREEND);
 
     for (let i = 0; i < this.#boardPoints.length; i++) {
       const point = this.#boardPoints[i];

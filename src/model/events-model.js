@@ -1,10 +1,11 @@
 import { CITIES } from '../const.js';
 import { getRandomEvent, mockDestination, mockOffers } from '../mocked-data/mock-data.js';
 import { humanizeEventDate } from '../utils.js';
+import {POINT_COUNT} from '../const.js';
 
 
 export default class EventsModel {
-  #events = Array.from({ length: CITIES.length - 1 }, getRandomEvent);
+  #events = Array.from({ length: POINT_COUNT }, getRandomEvent);
   offers = mockOffers;
   destinations = mockDestination;
 
@@ -39,7 +40,7 @@ export default class EventsModel {
   }
 
   getTripTitle() {
-    const events = this.events;
+    const events = this.#events;
     if (events.length === 0) {
       return 'Add an event into itinerary';
     }
@@ -61,6 +62,7 @@ export default class EventsModel {
     const sortedEvents = [...events].sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
     const dateStart = sortedEvents[0].dateFrom;
     const dateEnd = sortedEvents[sortedEvents.length - 1].dateTo;
+
     return `${humanizeEventDate(dateStart)} — ${humanizeEventDate(dateEnd)}`;
   }
 
@@ -74,5 +76,33 @@ export default class EventsModel {
 
       return total + eventCost + offersCost;
     }, 0);
+  }
+
+  getAvailableFilters() {
+    const events = this.#events;
+    const currentDate = new Date();
+
+    return [
+      {
+        type: 'everything',
+        name: 'Everything',
+        isChecked: true,
+        isDisabled: events.length === 0
+      },
+      {
+        type: 'future',
+        name: 'Future',
+        isChecked: false,
+        isDisabled: !events.some((point) => new Date(point.dateFrom) > currentDate)
+      },
+      {
+        type: 'present',
+        name: 'Present',
+        isChecked: false,
+        isDisabled: !events.some((point) => new Date(point.dateFrom) <= currentDate && new Date(point.dateTo) < currentDate)
+      };
+      
+    ]
+
   }
 }

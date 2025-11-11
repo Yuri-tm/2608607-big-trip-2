@@ -13,6 +13,11 @@ const siteTripEventsElement = siteMainElement.querySelector('.trip-events');
 
 const eventsModel = new EventsModel();
 
+const availableFilters = eventsModel.getAvailableFilters();
+const filterComponent = new FiltersView(availableFilters);
+
+render(filterComponent, siteHeaderFiltersElement);
+
 const itineraryPresenter = new ItineraryPresenter({
   boardContainer: siteTripEventsElement,
   eventsModel});
@@ -21,8 +26,6 @@ const tripInfoPresenter = new TripInfoPresenter({
   infoContainer: siteTripInfoElement,
   eventsModel,
 });
-
-render(new FiltersView(), siteHeaderFiltersElement);
 
 itineraryPresenter.init();
 tripInfoPresenter.init();

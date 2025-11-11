@@ -158,7 +158,47 @@ function createEventEditTemplate(){
 }
 
 export default class EventEditView extends AbstractView {
+
+  #point = null;
+  #offers = null;
+  #checkedOffers = null;
+  #destination = null;
+  #handleFormSubmit = null;
+  #handleCloseClick = null;
+
+  constructor({ point, offers, checkedOffers, destination, onFormSubmit, onCloseClick }) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#checkedOffers = checkedOffers;
+    this.#destination = destination;
+    // Normalize callbacks to functions (allow optional handlers)
+    this.#handleFormSubmit = (typeof onFormSubmit === 'function') ? onFormSubmit : () => { };
+    this.#handleCloseClick = (typeof onCloseClick === 'function') ? onCloseClick : () => { };
+
+    const el = this.element; // triggers element creation via AbstractView
+    if (el) {
+      // If the component's root is a <form>, listen on the root for submit.
+      el.addEventListener('submit', this.#formSubmitHandler);
+
+      const rollupBtn = el.querySelector('.event__rollup-btn');
+      if (rollupBtn) {
+        rollupBtn.addEventListener('click', this.#closeClickHandler);
+      }
+    }
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
+
+  #closeClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCloseClick();
+  };
+
   get template() {
-    return createEventEditTemplate();
+    return createEventEditTemplate(this.#point, this.#offers, this.#checkedOffers, this.#destination);
   }
 }

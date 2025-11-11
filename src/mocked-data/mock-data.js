@@ -91,7 +91,7 @@ export const mockOffers = [
         id: 'uuidv4()',
         title: 'A separate compartment',
         price: 30,
-        isChoosen: getRandomBoolean(),
+        isChosen: getRandomBoolean(),
       },
       {
         id: 'uuidv4()',
